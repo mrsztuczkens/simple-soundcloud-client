@@ -1,14 +1,19 @@
 import { connect } from 'react-redux'
 
 import { fetchArtistIfNeeded, selectArtist  } from './../actions/artistsActions'
+import { ObjectStatus } from './../enums'
 import { ArtistComponent } from './../components'
 
 const mapStateToProps = (state) => {
     const { cache, current } = state.artists;
     const currentArtistCache = cache[current];
     return {
-        isFetching: (currentArtistCache && currentArtistCache.isFetching) || false,
-        info: (currentArtistCache && currentArtistCache.info) || {}
+        status: (currentArtistCache && currentArtistCache.status) || ObjectStatus.DEFAULT,
+        info: (currentArtistCache && currentArtistCache.info) || {},
+        tracks: (currentArtistCache && currentArtistCache.tracks) || [],
+        tracksStatus: (currentArtistCache && currentArtistCache.tracksStatus) || ObjectStatus.DEFAULT,
+        playlists: (currentArtistCache && currentArtistCache.playlists) || [],
+        playlistsStatus: (currentArtistCache && currentArtistCache.playlistsStatus) || ObjectStatus.DEFAULT,
     };
 }
 

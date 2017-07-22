@@ -15,17 +15,8 @@ import './App.css';
 
 const history = createHistory();
 
-
-
 class App extends Component {
 
-    constructor() {
-        super();
-
-        this.state = {
-            currentTrack: null
-        };
-    }
 
     componentWillMount() {
         SC.initialize({
@@ -43,7 +34,7 @@ class App extends Component {
                     <SearchWidgetComponent />
                     <Route path="/artist/:permalink" component={ArtistContainer} />
                     <Route path="/search/:q?" component={SearchContainer} />
-                    <PlayerContainer currentTrack={this.state.currentTrack} />
+                    <PlayerContainer />
                 </div>
             </Router>
         );

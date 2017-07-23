@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+
+import { artist as artistUrl } from './../../helpers/url-helper'
 
 class SearchComponent extends Component {
 
@@ -15,7 +18,6 @@ class SearchComponent extends Component {
     }
 
     componentDidMount() {
-        console.log('mnt', this.props);
         this.props.search(this.props.match.params.q);
     }
 
@@ -40,7 +42,8 @@ class SearchComponent extends Component {
             <div>
                 {this.props.results.map(track =>
                     <p key={track.id}>
-                        {track.title} <button onClick={() => this.select(track.id)}>Select</button>
+                        {track.title} by <Link to={artistUrl(track.user.permalink)}>{track.user.username}</Link>
+                        <button onClick={() => this.select(track.id)}>&nbsp;Play</button>
                     </p>
                 )}
             </div>

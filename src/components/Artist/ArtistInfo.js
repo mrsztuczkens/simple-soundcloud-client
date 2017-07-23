@@ -9,7 +9,6 @@ export default class ArtistInfo extends Component {
 
     render() {
         const { username, city, country, avatar_url } = this.props.info;
-        console.log(this.props.info)
         return (
             <div>
                 <h3>{username}</h3>

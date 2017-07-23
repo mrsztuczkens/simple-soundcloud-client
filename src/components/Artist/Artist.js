@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Row, Col } from 'react-bootstrap';
+import { Route } from 'react-router';
 
 import { ObjectStatus } from './../../enums';
-import ArtistInfo from './ArtistInfo'
+import ArtistInfo from './ArtistInfo';
+import ArtistView from './ArtistView';
+import PlaylistView from './PlaylistView';
 
 export default class Artist extends Component {
 
@@ -16,17 +19,21 @@ export default class Artist extends Component {
     };
 
     componentWillMount() {
-        const { permalink } = this.props.match.params;
-        this.props.fetchifNeeded(permalink);
-        this.props.select(permalink);
+        this.props.fetchifNeeded(this.permalink);
+        this.props.select(this.permalink);
     }
 
     componentDidUpdate(newProps) {
         //Todo download other user's data if that changed
     }
 
+    get permalink() {
+        return this.props.match.params.permalink
+    }
+
     render() {
-        if (this.props.status === ObjectStatus.FETCHING)
+        const { status, info, match } = this.props;
+        if (status === ObjectStatus.FETCHING)
             return (<h3>Fetching...</h3>);
         return (
             <Grid fluid>
@@ -35,37 +42,41 @@ export default class Artist extends Component {
                         <ArtistInfo info={this.props.info} status={this.props.status} />
                     </Col>
                     <Col lg={9}>
-                        {this.renderPlaylists()}
-                        {this.renderTracks()}
+                        <Route path={`${match.url}/sets/:setName`} render={(props) => {
+                            const setName = props.match.params.setName
+                            let playlist = this.props.playlists.filter(pl => pl.permalink == setName)
+                            playlist = playlist[0] || {} //TODO make it better
+                            return (
+                                <PlaylistView
+                                    {...props}
+                                    permalink={this.permalink}
+                                    playlist={playlist}
+                                    playlistsStatus={this.props.playlistsStatus}
+                                />
+                            )
+                        }}
+                        />
+                        <Route path={`${match.url}/tracks/:trackName`} render={(props) => {
+                            const trackName = props.match.params.trackName
+                            let track = this.props.tracks.filter(pl => pl.permalink == trackName)
+                            track = track[0] || {} //TODO make it better
+                            console.log('found', {track});
+                            return <h2>Track</h2>
+                        }} />
+                        <Route exact path={match.url} render={(props) => (
+                            <ArtistView
+                                {...props}
+                                permalink={this.permalink}
+                                playlists={this.props.playlists}
+                                playlistsStatus={this.props.playlistsStatus}
+                                tracks={this.props.tracks}
+                                tracksStatus={this.props.tracksStatus}
+                            />
+                        )} />
                     </Col>
                 </Row>
             </Grid>
 
-        );
-    }
-
-    renderPlaylists() {
-        if (this.props.playlistsStatus === ObjectStatus.FETCHING) {
-            return <h3>Fetching playlists</h3>
-        }
-        return (
-            <div>
-                <h4>Playlists</h4>
-
-                <ul>{this.props.playlists.map(plist => <li key={plist.id}>{plist.title}</li>)}</ul>
-            </div>
-        );
-    }
-
-    renderTracks() {
-        if (this.props.tracksStatus === ObjectStatus.FETCHING) {
-            return <h3>Fetching tracks</h3>
-        }
-        return (
-            <div>
-                <h4>Tracks</h4>
-                <ul>{this.props.tracks.map(track => <li key={track.id}>{track.title}</li>)}</ul>
-            </div>
         );
     }
 }

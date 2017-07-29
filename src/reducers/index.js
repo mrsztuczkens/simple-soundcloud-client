@@ -1,15 +1,7 @@
 import { combineReducers } from 'redux'
-import { CHANGE_TRACK, SEARCH_STARTED, SEARCH_RESULTS } from './../actions'
+import { SEARCH_STARTED, SEARCH_RESULTS } from './../actions'
 import artists from './artistsReducer';
-
-function track(state = null, action) {
-    switch (action.type) {
-        case CHANGE_TRACK:
-            return action.track;
-        default:
-            return state
-    }
-}
+import track from './trackReducer'
 
 const searchResultsDefaultState = {
     isFetching: false,

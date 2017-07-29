@@ -7,6 +7,7 @@ import SC from 'soundcloud';
 export const ARTIST_FETCH = 'ARTIST_FETCH';
 export const ARTIST_FETCH_TRACKS = 'ARTIST_FETCH_TRACKS';
 export const ARTIST_FETCH_PLAYLISTS = 'ARTIST_FETCH_PLAYLISTS';
+export const ARTIST_NOT_FOUND = 'ARTIST_NOT_FOUND';
 export const ARTIST_RECEIVE = 'ARTIST_RECEIVE';
 export const ARTIST_RECEIVE_TRACKS = 'ARTIST_RECEIVE_TRACKS';
 export const ARTIST_RECEIVE_PLAYLISTS = 'ARTIST_RECEIVE_PLAYLISTS';
@@ -24,10 +25,15 @@ export const fetchArtistIfNeeded = (permalink) => (dispatch, getState) => {
 
     return SC.get('/users/', { q: permalink })
         .then(([user]) => {
+            if (!user) {
+                dispatch(notFoundArtist(permalink))
+                return null;
+            }
             dispatch(receiveArtist(permalink, user));
-            return user.id;
+            return user.id; //TODO handle user not ofund
         })
         .then(userId => {
+            if (!userId) return true
             dispatch(fetchArtistTracks(permalink))
             dispatch(fetchArtistPlaylists(permalink))
             const baseUrl = `/users/${userId}`;
@@ -56,6 +62,11 @@ export const fetchArtistTracks = permalink => ({
 
 export const fetchArtistPlaylists = permalink => ({
     type: ARTIST_FETCH_PLAYLISTS,
+    permalink
+});
+
+export const notFoundArtist = (permalink) => ({
+    type: ARTIST_NOT_FOUND,
     permalink
 });
 

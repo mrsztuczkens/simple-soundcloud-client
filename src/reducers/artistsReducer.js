@@ -1,5 +1,5 @@
 import { 
-    ARTIST_SELECT,
+    ARTIST_SELECT, ARTIST_NOT_FOUND,
     ARTIST_FETCH, ARTIST_FETCH_TRACKS, ARTIST_FETCH_PLAYLISTS,
     ARTIST_RECEIVE, ARTIST_RECEIVE_TRACKS, ARTIST_RECEIVE_PLAYLISTS
 } from './../actions/artistsActions';
@@ -42,6 +42,8 @@ export default function artists(state = defaultState, action) {
             return updateCache(state, action.permalink, { tracksStatus: ObjectStatus.FETCHING })
         case ARTIST_FETCH_PLAYLISTS:
             return updateCache(state, action.permalink, { playlistsStatus: ObjectStatus.FETCHING })
+        case ARTIST_NOT_FOUND:
+            return updateCache(state, action.permalink, { status: ObjectStatus.NOTFOUND })
         case ARTIST_RECEIVE:
             return updateCache(state, action.permalink, { status: ObjectStatus.FETCHED, info: action.info });
         case ARTIST_RECEIVE_TRACKS:

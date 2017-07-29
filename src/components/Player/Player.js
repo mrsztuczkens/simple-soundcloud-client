@@ -19,7 +19,10 @@ function formatStreamUrl(str) {
 class Player extends Component {
 
     static props = {
-        track: PropTypes.object
+        track: PropTypes.object,
+        isPlaying: PropTypes.bool,
+        play: PropTypes.func.isRequired,
+        pause: PropTypes.func.isRequired
     };
 
     constructor() {
@@ -28,13 +31,7 @@ class Player extends Component {
         this.state = {
             volume: 1,
             progress: 0,
-            playing: false
         };
-
-        //bound functions
-        this.onTimeUpdate = this.onTimeUpdate.bind(this);
-        this.onVolumeChange = this.onVolumeChange.bind(this);
-        this.togglePlay = this.togglePlay.bind(this);
     }
 
     componentDidMount() {
@@ -52,19 +49,23 @@ class Player extends Component {
         this.audio.removeEventListener(this.onTimeUpdate);
     }
 
-    onVolumeChange(newVolumeValue) {
+    componentWillReceiveProps(netProps) {
+        //TODO handle pausing nad playing
+    }
+
+    onVolumeChange = (newVolumeValue) => {
         console.log({ newVolumeValue });
         this.audio.volume = newVolumeValue;
         this.setState({ volume: newVolumeValue });
     }
 
-    onTimeUpdate() {
+    onTimeUpdate = () => {
         const progress = this.audio.currentTime / this.audio.duration * 100;
         this.setState({ progress });
     }
 
-    togglePlay() {
-        this.state.playing ? this.audio.pause() : this.audio.play();
+    togglePlay = () => {
+        this.props.isPlaying ? this.audio.pause() : this.audio.play();
         this.setState({ playing: !this.state.playing });
     }
 

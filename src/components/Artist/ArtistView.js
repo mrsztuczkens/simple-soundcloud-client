@@ -10,9 +10,10 @@ import { playlist as playlistUrl } from './../../helpers/url-helper'
 export default class ArtistMain extends Component {
 
     static props = {
-        permalink: PropTypes.string,
+        artist: PropTypes.string,
         playlists: PropTypes.array,
-        tracks: PropTypes.array
+        tracks: PropTypes.array,
+        changeTrack: PropTypes.func.isRequired,
     }
 
     render() {
@@ -29,13 +30,13 @@ export default class ArtistMain extends Component {
         if (this.props.playlistsStatus === ObjectStatus.FETCHING) {
             return <h3>Fetching playlists</h3>
         }
-        const { playlists, permalink } = this.props;
+        const { playlists, artist } = this.props;
         return (
             <div>
                 <h4>Playlists</h4>
                 <ListGroup>{playlists.map(plist =>
                     <ListGroupItem key={plist.id}>
-                        <Link to={playlistUrl(permalink, plist.permalink)}>{plist.title}</Link>
+                        <Link to={playlistUrl(artist, plist.permalink)}>{plist.title}</Link>
                     </ListGroupItem>
                 )}
                 </ListGroup>
@@ -50,7 +51,11 @@ export default class ArtistMain extends Component {
         return (
             <div>
                 <h4>Tracks</h4>
-                <TrackList tracks={this.props.tracks} />
+                <TrackList
+                    artist={this.props.artist}
+                    tracks={this.props.tracks}
+                    changeTrack={this.props.changeTrack}
+                />
             </div>
         );
     }

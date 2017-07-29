@@ -6,7 +6,7 @@ import createHistory from 'history/createBrowserHistory';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 
-import { SearchWidgetComponent } from './components/';
+import { SearchWidgetComponent, NotFoundComponent } from './components/';
 import { SearchContainer, PlayerContainer, ArtistContainer } from './containers'
 import { CLIENT_ID } from './consts';
 
@@ -34,6 +34,7 @@ class App extends Component {
                     <SearchWidgetComponent />
                     <Route path="/artist/:permalink" component={ArtistContainer} />
                     <Route path="/search/:q?" component={SearchContainer} />
+                    <Route path="/404" component={NotFoundComponent} />
                     <PlayerContainer />
                 </div>
             </Router>

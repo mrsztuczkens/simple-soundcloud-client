@@ -11,12 +11,6 @@ class SearchComponent extends Component {
         isFetching: PropTypes.bool
     };
 
-    constructor(props) {
-        super(props);
-        
-        this.select = this.select.bind(this);
-    }
-
     componentDidMount() {
         this.props.search(this.props.match.params.q);
     }
@@ -28,10 +22,10 @@ class SearchComponent extends Component {
     }
 
 
-    select(id) {
-        const filtered = this.props.results.filter(tr => tr.id === id);
-        if (filtered.length === 1) {
-            this.props.changeTrack( filtered[0] );
+    select = (id) => {
+        const track = this.props.results.find(tr => tr.id === id);
+        if (track) {
+            this.props.changeTrack( track );
         }
     }
 

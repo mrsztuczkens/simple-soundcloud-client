@@ -14,6 +14,7 @@ export default class ArtistMain extends Component {
         playlists: PropTypes.array,
         tracks: PropTypes.array,
         changeTrack: PropTypes.func.isRequired,
+        addTrackToQueue: PropTypes.func.isRequired,
     }
 
     render() {
@@ -55,6 +56,7 @@ export default class ArtistMain extends Component {
                     artist={this.props.artist}
                     tracks={this.props.tracks}
                     changeTrack={this.props.changeTrack}
+                    addTrackToQueue={this.props.addTrackToQueue}
                 />
             </div>
         );

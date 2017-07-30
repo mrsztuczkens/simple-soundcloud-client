@@ -19,6 +19,7 @@ export default class Artist extends Component {
         fetchifNeeded: PropTypes.func.isRequired,
         select: PropTypes.func.isRequired,
         changeTrack: PropTypes.func.isRequired,
+        addTrackToQueue: PropTypes.func.isRequired,
     };
 
     artist = '';
@@ -62,6 +63,7 @@ export default class Artist extends Component {
                                     playlist={playlist}
                                     playlistsStatus={this.props.playlistsStatus}
                                     changeTrack={this.props.changeTrack}
+                                    addTrackToQueue={this.props.addTrackToQueue}
                                 />
                             )
                         }}
@@ -76,6 +78,7 @@ export default class Artist extends Component {
                                     track={track}
                                     tracksStatus={this.props.tracksStatus}
                                     changeTrack={this.props.changeTrack}
+                                    addTrackToQueue={this.props.addTrackToQueue}
                                 />
                             )
                         }} />
@@ -88,6 +91,7 @@ export default class Artist extends Component {
                                 tracks={this.props.tracks}
                                 tracksStatus={this.props.tracksStatus}
                                 changeTrack={this.props.changeTrack}
+                                addTrackToQueue={this.props.addTrackToQueue}
                             />
                         )} />
                     </Col>

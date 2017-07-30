@@ -1,12 +1,13 @@
 import { 
-    NEXT, PREVIOUS, PAUSE, PLAY, ADD_TO_QUEUE, PLAY_TRACK
+    NEXT, PREVIOUS, PAUSE, PLAY, ADD_TO_QUEUE, PLAY_TRACK, TOGGLE_REPEAT
 } from './../actions/trackActions';
 
 const defaultState = {
     currentTrack: null,
     isPlaying: false,
     previousTracks: [],
-    nextTracks: []
+    nextTracks: [],
+    repeat: false,
 };
 
 
@@ -21,6 +22,7 @@ export default function track(state = defaultState, action) {
         }
         case PAUSE: return { ...state, isPlaying: false };
         case PLAY: return { ...state, isPlaying: true };
+        case TOGGLE_REPEAT: return { ...state, repeat: !state.repeat };
         case ADD_TO_QUEUE: return { ...state, nextTracks: state.nextTracks.concat([action.track])};
         case NEXT: {
             const previousTracks = state.previousTracks.concat([state.currentTrack]);
@@ -32,8 +34,13 @@ export default function track(state = defaultState, action) {
             const nextTracks = state.nextTracks.slice(1)
             return { ...state, previousTracks, currentTrack, nextTracks };
         }
-        case PREVIOUS:
-            // TODO
+        case PREVIOUS: {
+            if (state.previousTracks.length === 0) return state;
+            const currentTrack = state.previousTracks[0];
+            const previousTracks = state.previousTracks.slice(1);
+            const nextTracks = [state.currentTrack].concat(state.nextTracks);
+            return { ...state, currentTrack, previousTracks, nextTracks };
+        }
         default:
             return state;
     }

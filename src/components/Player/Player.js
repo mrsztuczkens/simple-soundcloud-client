@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FaPlay, FaPause, FaVolumeUp, FaRepeat } from 'react-icons/lib/fa';
+import { FaPlay, FaPause, FaVolumeUp, FaRepeat, FaForward, FaBackward } from 'react-icons/lib/fa';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { throttle } from 'lodash';
 
@@ -8,21 +8,26 @@ import ProgressBar from './ProgressBar';
 import VolumeBar from './VolumeBar';
 import TrackInfo from './TrackInfo';
 
+import { IconWrapper, PlayerWrapper } from './Player.style'
 import { CLIENT_ID } from './../../consts';
-
-
 
 function formatStreamUrl(str) {
     return `${str}?client_id=${CLIENT_ID}`;
 }
 
-class Player extends Component {
+export default class Player extends Component {
 
     static props = {
         track: PropTypes.object,
         isPlaying: PropTypes.bool,
+        hasNext: PropTypes.bool.isRequired,
+        hasPrevious: PropTypes.bool.isRequired,
+        repeat: PropTypes.bool.isRequired,
         play: PropTypes.func.isRequired,
-        pause: PropTypes.func.isRequired
+        pause: PropTypes.func.isRequired,
+        next: PropTypes.func.isRequired,
+        previous: PropTypes.func.isRequired,
+        toggleRepeat: PropTypes.func.isRequired,
     };
 
     constructor() {
@@ -35,22 +40,49 @@ class Player extends Component {
     }
 
     componentDidMount() {
-        this.audio.addEventListener('ended', () => console.log('ended'), false);
-        this.audio.addEventListener('loadedmetadata', () => console.log('load metadata'), false);
+        this.audio.addEventListener('ended', this.onEnded, false);
+        this.audio.addEventListener('loadedmetadata', this.onLoadMetadata);
         this.audio.addEventListener('loadstart', () => console.log('load start'), false);
         this.audio.addEventListener('pause', () => console.log('paused'), false);
         this.audio.addEventListener('play', () => console.log('played'), false);
-        this.audio.addEventListener('timeupdate', throttle(this.onTimeUpdate, 250, { leading: true }), false);
+        this.audio.addEventListener('timeupdate', this.onTimeUpdate, false);
 
         this.setState({ volume: this.audio.volume });
     }
 
     componentWillUnmount() {
-        this.audio.removeEventListener(this.onTimeUpdate);
+        this.audio.removeEventListener('ended', this.onEnded);
+        this.audio.removeEventListener('loadedmetadata', this.onLoadMetadata);
     }
 
-    componentWillReceiveProps(netProps) {
+    componentWillReceiveProps(nextProps) {
         //TODO handle pausing nad playing
+        console.log({nextProps})
+        if (!this.props.isPlaying && nextProps.isPlaying && this.props.track === nextProps.track) {
+            this.audio.play();
+        }
+        if (this.props.isPlaying && !nextProps.isPlaying) {
+            this.audio.pause();
+        }
+
+    }
+
+    onLoadMetadata = () => {
+        console.log('load metadata')
+        if (this.props.isPlaying) {
+            this.audio.play()
+        }
+        this.onTimeUpdate()
+    }
+
+    onEnded = () => {
+        if (this.props.repeat) {
+            this.audio.play();
+        } else if (this.props.hasNext) {
+            this.props.next()
+        } else {
+            this.props.pause()
+        }
     }
 
     onVolumeChange = (newVolumeValue) => {
@@ -64,24 +96,34 @@ class Player extends Component {
         this.setState({ progress });
     }
 
-    togglePlay = () => {
-        this.props.isPlaying ? this.audio.pause() : this.audio.play();
-        this.setState({ playing: !this.state.playing });
-    }
-
     render() {
         //this.props.track && console.log(JSON.stringify( this.props.track ));
         return (
-            <div style={{ position: 'fixed', bottom: 0, width: '100%', minHeight: '100px' }}>
-                <audio hidden ref={(input) => { this.audio = input; }} src={this.props.track && formatStreamUrl(this.props.track.stream_url)} />
+            <PlayerWrapper>
+                <audio hidden ref={(input) => this.audio = input } src={this.props.track && formatStreamUrl(this.props.track.stream_url)} />
                 <Grid fluid>
                     <Row>
                         <Col lg={3}>
                             <TrackInfo track={this.props.track} />
                         </Col>
                         <Col lg={6}>
-                            {this.renderPlayPauseButton()}
-                            <FaRepeat className="icon2x" />
+                            <IconWrapper>
+                                <FaBackward disabled={!this.props.hasPrevious} onClick={this.props.previous} className="icon2x" />
+                            </IconWrapper>
+                            {!this.props.isPlaying && 
+                                <IconWrapper>
+                                    <FaPlay disabled={!this.props.track} onClick={this.props.play} className="icon2x" />
+                                </IconWrapper>
+                            }
+                            {this.props.isPlaying &&
+                                <FaPause onClick={this.props.pause} className="icon2x" />
+                            }
+                            <IconWrapper>
+                                <FaForward disabled={!this.props.hasNext} onClick={this.props.next} className="icon2x" />
+                            </IconWrapper>
+                            <IconWrapper>
+                                <FaRepeat disabled={!this.props.repeat} className="icon2x" onClick={this.props.toggleRepeat} />
+                            </IconWrapper>
                             <ProgressBar progress={this.state.progress} track={this.props.track} />
                         </Col>
                         <Col lg={3}>
@@ -96,17 +138,7 @@ class Player extends Component {
                         </Col>
                     </Row>
                 </Grid>
-            </div>
+            </PlayerWrapper>
         );
     }
-
-    renderPlayPauseButton() {
-        if (!this.state.playing) {
-            return (<FaPlay disabled={!this.props.track} onClick={this.togglePlay} className="icon2x" />);
-        } else {
-            return (<FaPause onClick={this.togglePlay} className="icon2x" />);
-        }
-    }
 }
-
-export default Player;

@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { ListGroup, ListGroupItem } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import { FaPlay } from 'react-icons/lib/fa';
+import { FaPlay, FaPlus } from 'react-icons/lib/fa';
 
 import { track as trackUrl } from './../../../helpers/url-helper'
-import { PlayIcon } from './TrackList.style'
+import { IconWrapper } from './TrackList.style'
 
 export default class TrackList extends Component {
 
@@ -13,6 +13,7 @@ export default class TrackList extends Component {
         artist: PropTypes.string.isRequired,
         tracks: PropTypes.array.isRequired,
         changeTrack: PropTypes.func.isRequired,
+        addTrackToQueue: PropTypes.func.isRequired,
     }
 
     render() {
@@ -21,9 +22,12 @@ export default class TrackList extends Component {
                 {this.props.tracks.map(track =>
                     <ListGroupItem key={track.id}>
                         <Link to={trackUrl(this.props.artist, track.permalink)}>{track.title}</Link>
-                        <PlayIcon>
+                        <IconWrapper>
                             <FaPlay onClick={() => this.props.changeTrack(track)} />
-                        </PlayIcon>
+                        </IconWrapper>
+                        <IconWrapper>
+                            <FaPlus onClick={() => this.props.addTrackToQueue(track)} />
+                        </IconWrapper>
                     </ListGroupItem>
                 )}
             </ListGroup>

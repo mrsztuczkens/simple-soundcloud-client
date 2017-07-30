@@ -6,7 +6,7 @@ import createHistory from 'history/createBrowserHistory';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 
-import { SearchWidgetComponent, NotFoundComponent } from './components/';
+import { NotFoundComponent, NavigationComponent } from './components/';
 import { SearchContainer, PlayerContainer, ArtistContainer } from './containers'
 import { CLIENT_ID } from './consts';
 
@@ -28,10 +28,7 @@ class App extends Component {
         return (
             <Router history={history}>
                 <div className="App">
-                    <div className="App-header">
-                        <h2>Simple Soundcloud Client</h2>
-                    </div>
-                    <SearchWidgetComponent />
+                    <NavigationComponent />
                     <Route path="/artist/:permalink" component={ArtistContainer} />
                     <Route path="/search/:q?" component={SearchContainer} />
                     <Route path="/404" component={NotFoundComponent} />

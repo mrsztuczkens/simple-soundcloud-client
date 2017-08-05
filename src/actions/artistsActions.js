@@ -30,7 +30,7 @@ export const fetchArtistIfNeeded = (permalink) => (dispatch, getState) => {
                 return null;
             }
             dispatch(receiveArtist(permalink, user));
-            return user.id; //TODO handle user not ofund
+            return user.id;
         })
         .then(userId => {
             if (!userId) return true

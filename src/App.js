@@ -6,8 +6,8 @@ import createHistory from 'history/createBrowserHistory';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 
-import { NotFoundComponent, NavigationComponent } from './components/';
-import { SearchContainer, PlayerContainer, ArtistContainer } from './containers'
+import { NotFoundComponent } from './components/';
+import { SearchResultsContainer, PlayerContainer, ArtistContainer, NavigationContainer } from './containers'
 import { CLIENT_ID } from './consts';
 
 import logo from './logo.svg';
@@ -28,9 +28,9 @@ class App extends Component {
         return (
             <Router history={history}>
                 <div className="App">
-                    <NavigationComponent />
+                    <NavigationContainer />
                     <Route path="/artist/:permalink" component={ArtistContainer} />
-                    <Route path="/search/:q?" component={SearchContainer} />
+                    <Route path="/search/:q?" component={SearchResultsContainer} />
                     <Route path="/404" component={NotFoundComponent} />
                     <PlayerContainer />
                 </div>

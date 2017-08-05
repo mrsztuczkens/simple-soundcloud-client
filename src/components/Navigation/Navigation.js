@@ -6,6 +6,11 @@ import Search from './Search';
 export default class Navigation extends Component {
 
     render() {
+        const searchProps = {
+            search: this.props.search,
+            data: this.props.searchData,
+            isFetching: this.props.searchIsFetching
+        };
         return (
             <Navbar inverse collapseOnSelect>
                 <Navbar.Header>
@@ -15,7 +20,7 @@ export default class Navigation extends Component {
                     <Navbar.Toggle />
                 </Navbar.Header>
                 <Navbar.Collapse>
-                    <Search />
+                    <Search {...searchProps} />
                 </Navbar.Collapse>
             </Navbar>
         )

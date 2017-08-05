@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 
-import { changeTrack, search } from './../actions'
+import { search } from './../actions/searchActions'
 import { SearchComponent } from './../components'
 
 const mapStateToProps = (state) => {
@@ -12,7 +12,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    changeTrack: (track) => dispatch(changeTrack(track)),
     search: (q) => dispatch(search(q))
   }
 }

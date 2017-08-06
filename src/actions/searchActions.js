@@ -2,6 +2,7 @@ import SC from 'soundcloud';
 
 export const SEARCH_STARTED = 'SEARCH_STARTED';
 export const SEARCH_RESULTS = 'SEARCH_RESULTS';
+export const SEARCH_RESULTS_HIDE = 'SEARCH_RESULTS_HIDE';
 
 export const search = (q) => dispatch => {
     dispatch(searchStarted(q));
@@ -18,4 +19,8 @@ const searchResults = (query, results) => ({
     type: SEARCH_RESULTS,
     query,
     results
+});
+
+export const searchResultsHide = () => ({
+    type: SEARCH_RESULTS_HIDE
 });

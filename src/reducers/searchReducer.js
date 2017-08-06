@@ -1,9 +1,10 @@
-import { SEARCH_STARTED, SEARCH_RESULTS } from './../actions/searchActions'
+import { SEARCH_STARTED, SEARCH_RESULTS, SEARCH_RESULTS_HIDE } from './../actions/searchActions'
 
 const searchResultsDefaultState = {
     isFetching: false,
+    isVisible: false,
     query: '',
-    data: []
+    data: [],
 };
 
 export default function search(state = searchResultsDefaultState, action) {
@@ -13,11 +14,19 @@ export default function search(state = searchResultsDefaultState, action) {
                 return Object.assign({}, searchResultsDefaultState);
             return {
                 isFetching: true,
+                isVisible: false,
                 query: action.query,
-                data: []
+                data: [],
             };
         case SEARCH_RESULTS:
-            return { isFetching: false, data: action.results, query: action.query };
+            return {
+                isFetching: false,
+                isVisible: true,
+                data: action.results,
+                query: action.query,
+            };
+        case SEARCH_RESULTS_HIDE:
+            return { ...state, isVisible: false };
         default:
             return state;
     }

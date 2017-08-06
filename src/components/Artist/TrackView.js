@@ -8,7 +8,10 @@ import { TrackNotFound } from './../../consts';
 export default class TrackView extends Component {
 
     static propTypes = {
-        track: PropTypes.object,
+        track: PropTypes.oneOfType([
+            PropTypes.object,
+            PropTypes.symbol,
+        ]),
         tracksStatus: PropTypes.symbol.isRequired,
         artist: PropTypes.string.isRequired,
     }

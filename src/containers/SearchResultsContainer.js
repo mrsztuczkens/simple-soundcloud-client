@@ -6,6 +6,7 @@ import { SearchComponent } from './../components'
 const mapStateToProps = (state) => {
   return {
     isFetching: state.searchResults.isFetching,
+    isVisible: state.searchResults.isVisible,
     results: state.searchResults.data
   }
 }

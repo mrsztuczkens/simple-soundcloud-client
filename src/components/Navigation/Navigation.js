@@ -9,7 +9,9 @@ export default class Navigation extends Component {
         const searchProps = {
             search: this.props.search,
             data: this.props.searchData,
-            isFetching: this.props.searchIsFetching
+            isFetching: this.props.searchIsFetching,
+            isVisible: this.props.searchIsVisible,
+            hide: this.props.searchResultsHide,
         };
         return (
             <Navbar inverse collapseOnSelect>

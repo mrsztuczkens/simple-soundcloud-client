@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FaPlay, FaPause, FaVolumeUp, FaRepeat, FaForward, FaBackward } from 'react-icons/lib/fa';
 import { Grid, Row, Col } from 'react-bootstrap';
-import { throttle } from 'lodash';
 
 import ProgressBar from './ProgressBar';
 import VolumeBar from './VolumeBar';
@@ -56,8 +55,6 @@ export default class Player extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        //TODO handle pausing nad playing
-        console.log({nextProps})
         if (!this.props.isPlaying && nextProps.isPlaying && this.props.track === nextProps.track) {
             this.audio.play();
         }

@@ -18,17 +18,14 @@ margin: 0;
 `
 
 export const SearchResultsEntry = styled.li`
-cursor: pointer;
 display: block;
+padding: 8px 10px;
 
 a {
-    display: block;
-    padding: 8px 10px;
     color: black;
-    &:hover {
-        background-color: grey;
-        color: white;
+    &:hover, &:active {
         text-decoration: none;
+        color: grey;
     }
 }
 `

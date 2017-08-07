@@ -14,33 +14,25 @@ export default class Artist extends Component {
 
     static propTypes = {
         info: PropTypes.object,
+        permalink: PropTypes.string.isRequired,
         tracks: PropTypes.array,
         playlists: PropTypes.array,
         fetchifNeeded: PropTypes.func.isRequired,
-        select: PropTypes.func.isRequired,
         changeTrack: PropTypes.func.isRequired,
         addTrackToQueue: PropTypes.func.isRequired,
     };
 
-    artist = '';
 
     componentWillMount() {
-        this.artist = this.getPermalink()
-        this.props.fetchifNeeded(this.artist);
-        this.props.select(this.artist);
+        this.props.fetchifNeeded(this.props.permalink);
     }
 
     componentDidUpdate(newProps) {
-        this.artist = this.getPermalink()
-        //Todo download other user's data if that changed
-    }
-
-    getPermalink = () => {
-        return this.props.match.params.permalink
+        this.props.fetchifNeeded(this.props.permalink);
     }
 
     render() {
-        const { status, info, match } = this.props;
+        const { status, info, match, permalink } = this.props;
         if (status === ObjectStatus.FETCHING) {
             return (<h3>Fetching...</h3>);
         } else if (status === ObjectStatus.NOTFOUND) {
@@ -50,7 +42,7 @@ export default class Artist extends Component {
             <Grid fluid>
                 <Row>
                     <Col lg={3}>
-                        <ArtistInfo permalink={this.artist} info={this.props.info} status={this.props.status} />
+                        <ArtistInfo permalink={permalink} info={info} status={this.props.status} />
                     </Col>
                     <Col lg={9}>
                          <Route path={`${match.url}/sets/:setName`} render={(props) => {
@@ -59,7 +51,7 @@ export default class Artist extends Component {
                             return (
                                 <PlaylistView
                                     {...props}
-                                    artist={this.artist}
+                                    artist={permalink}
                                     playlist={playlist}
                                     playlistsStatus={this.props.playlistsStatus}
                                     changeTrack={this.props.changeTrack}
@@ -74,7 +66,7 @@ export default class Artist extends Component {
                             return (
                                 <TrackView
                                     {...props}
-                                    artist={this.artist}
+                                    artist={permalink}
                                     track={track}
                                     tracksStatus={this.props.tracksStatus}
                                     changeTrack={this.props.changeTrack}
@@ -85,7 +77,7 @@ export default class Artist extends Component {
                         <Route exact path={match.url} render={(props) => (
                             <ArtistView
                                 {...props}
-                                artist={this.artist}
+                                artist={permalink}
                                 playlists={this.props.playlists}
                                 playlistsStatus={this.props.playlistsStatus}
                                 tracks={this.props.tracks}

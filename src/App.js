@@ -29,7 +29,7 @@ class App extends Component {
             <Router history={history}>
                 <div className="App">
                     <NavigationContainer />
-                    <Route path="/artist/:permalink" component={ArtistContainer} />
+                    <Route path="/artist/:permalink" component={ArtistContainer} onEnter={(props) => { console.log('onenter', props)}} />
                     <Route path="/search/:q?" component={SearchResultsContainer} />
                     <Route path="/404" component={NotFoundComponent} />
                     <PlayerContainer />

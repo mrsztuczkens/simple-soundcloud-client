@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Navbar, FormGroup, Button, FormControl, ButtonGroup } from 'react-bootstrap'
-import { Redirect } from 'react-router';
+import { Navbar, FormGroup, Button, FormControl } from 'react-bootstrap'
 
 import SearchResults from './SearchResults';
 

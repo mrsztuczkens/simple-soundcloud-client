@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { FaPlay, FaPlus } from 'react-icons/lib/fa';
 
 import { track as trackUrl } from './../../../helpers/url-helper'
-import { IconWrapper } from './TrackList.style'
+import { ClickableIconWrapper } from './../../Styles'
 
 export default class TrackList extends Component {
 
@@ -22,12 +22,12 @@ export default class TrackList extends Component {
                 {this.props.tracks.map(track =>
                     <ListGroupItem key={track.id}>
                         <Link to={trackUrl(this.props.artist, track.permalink)}>{track.title}</Link>
-                        <IconWrapper>
-                            <FaPlay onClick={() => this.props.changeTrack(track)} />
-                        </IconWrapper>
-                        <IconWrapper>
-                            <FaPlus onClick={() => this.props.addTrackToQueue(track)} />
-                        </IconWrapper>
+                        <ClickableIconWrapper onClick={() => this.props.changeTrack(track)}>
+                            <FaPlay />
+                        </ClickableIconWrapper>
+                        <ClickableIconWrapper onClick={() => this.props.addTrackToQueue(track)} className="playlist">
+                            <FaPlus />
+                        </ClickableIconWrapper>
                     </ListGroupItem>
                 )}
             </ListGroup>

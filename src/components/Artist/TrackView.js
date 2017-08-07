@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router'
+import { FaPlay, FaPlus } from 'react-icons/lib/fa';
 
 import { ObjectStatus } from './../../enums';
 import { TrackNotFound } from './../../consts';
+import { ClickableIconWrapper } from './../Styles'
 
 export default class TrackView extends Component {
 
@@ -14,6 +16,8 @@ export default class TrackView extends Component {
         ]),
         tracksStatus: PropTypes.symbol.isRequired,
         artist: PropTypes.string.isRequired,
+        changeTrack: PropTypes.func.isRequired,
+        addTrackToQueue: PropTypes.func.isRequired,
     }
     
     render() {
@@ -24,7 +28,16 @@ export default class TrackView extends Component {
             return <Redirect to="/404" />
         }
 
-        console.log(this.props.track)
-        return <h3>{track.title}</h3>
+        return (
+            <div>
+                <h3>{track.title}</h3>
+                <ClickableIconWrapper>
+                    <FaPlay onClick={() => this.props.changeTrack(track)} />
+                </ClickableIconWrapper>
+                <ClickableIconWrapper>
+                    <FaPlus onClick={() => this.props.addTrackToQueue(track)} />
+                </ClickableIconWrapper>
+            </div>
+        );
     }
 }

@@ -1,5 +1,5 @@
 import { 
-    ARTIST_SELECT, ARTIST_NOT_FOUND,
+    ARTIST_NOT_FOUND,
     ARTIST_FETCH, ARTIST_FETCH_TRACKS, ARTIST_FETCH_PLAYLISTS,
     ARTIST_RECEIVE, ARTIST_RECEIVE_TRACKS, ARTIST_RECEIVE_PLAYLISTS
 } from './../actions/artistsActions';
@@ -7,7 +7,6 @@ import {
 import { ObjectStatus } from './../enums'
 
 const defaultState = {
-    current: '',
     cache: {}
 };
 
@@ -34,8 +33,6 @@ function updateCache(state, permalink, newData) {
 
 export default function artists(state = defaultState, action) {
     switch (action.type) {
-        case ARTIST_SELECT:
-            return { ...state, current: action.permalink };
         case ARTIST_FETCH: 
             return updateCache(state, action.permalink, { ...defaultArtist, status: ObjectStatus.FETCHING })
         case ARTIST_FETCH_TRACKS:

@@ -11,7 +11,6 @@ export const ARTIST_NOT_FOUND = 'ARTIST_NOT_FOUND';
 export const ARTIST_RECEIVE = 'ARTIST_RECEIVE';
 export const ARTIST_RECEIVE_TRACKS = 'ARTIST_RECEIVE_TRACKS';
 export const ARTIST_RECEIVE_PLAYLISTS = 'ARTIST_RECEIVE_PLAYLISTS';
-export const ARTIST_SELECT = 'ARTIST_SELECT';
 
 /**
  * Action Creators
@@ -44,11 +43,6 @@ export const fetchArtistIfNeeded = (permalink) => (dispatch, getState) => {
             return Promise.all(proms)
         });
 };
-
-export const selectArtist = permalink => ({
-    type: ARTIST_SELECT,
-    permalink
-});
 
 export const fetchArtist = permalink => ({
     type: ARTIST_FETCH,

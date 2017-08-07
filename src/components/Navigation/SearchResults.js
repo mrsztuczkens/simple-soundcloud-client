@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
-import { track as trackUrl } from '../../helpers/url-helper'
+import { track as trackUrl, artist as artistUrl } from '../../helpers/url-helper'
 import { SearchResultsWrapper, SearchResultsList, SearchResultsEntry } from './SearchResults.style'
 
 export default class SearchResults extends Component {
@@ -12,9 +12,6 @@ export default class SearchResults extends Component {
 
     componentWillUnmount() {
         document.removeEventListener('mousedown', this.handleClickOutside);
-    }
-
-    componentWillReceiveProps(nextProps) {
     }
 
     handleClickOutside = (event) => {
@@ -30,7 +27,8 @@ export default class SearchResults extends Component {
                 <SearchResultsList>
                     {data.map(track =>
                         <SearchResultsEntry key={track.id}>
-                            <Link to={trackUrl(track.user.permalink, track.permalink)}>{track.title}</Link>
+                            <Link onClick={() => this.props.hide()} to={trackUrl(track.user.permalink, track.permalink)}>{track.title}</Link>
+                            by <Link to={artistUrl(track.user.permalink)} onClick={() => this.props.hide()}>{track.user.username}</Link>
                         </SearchResultsEntry>
                     )}
                 </SearchResultsList>

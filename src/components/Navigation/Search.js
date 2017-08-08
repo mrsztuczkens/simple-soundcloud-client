@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Navbar, FormGroup, Button, FormControl } from 'react-bootstrap'
+import { throttle } from 'lodash';
 
 import SearchResults from './SearchResults';
 
@@ -9,8 +10,15 @@ export default class Search extends Component {
         super(props);
 
         this.state = {
-            q: 'System Shock Theme',
+            q: '',
         };
+        this.throttledSearch = throttle(() => this.props.search(this.state.q), 1000, { trailing: true });
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.q !== this.state.q) {
+            this.throttledSearch();
+        }
     }
 
     searchTextChanged = (e) => {
@@ -34,7 +42,7 @@ export default class Search extends Component {
             <form onSubmit={this.search}>
                 <Navbar.Form pullRight>
                     <FormGroup style={{ position: 'relative', overflow: 'visible' }}>
-                        <FormControl type="text" placeholder="Search" value={this.state.q} onChange={this.searchTextChanged} />
+                        <FormControl type="text" placeholder="Search ..." value={this.state.q} onChange={this.searchTextChanged} />
                         <SearchResults {...searchResultsProps} />
                     </FormGroup>
                     {' '}

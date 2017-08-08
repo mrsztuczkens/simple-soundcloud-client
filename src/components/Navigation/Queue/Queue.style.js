@@ -25,6 +25,7 @@ margin: 0;
 li {
     display: block;
     padding: 8px 10px;
+    cursor: move;
 }
 `;
 

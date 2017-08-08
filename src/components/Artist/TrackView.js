@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Redirect } from 'react-router'
 import { FaPlay, FaPlus } from 'react-icons/lib/fa';
 
-import { ObjectStatus } from './../../enums';
+import { ObjectStatus, EventType } from './../../enums';
 import { TrackNotFound } from './../../consts';
 import { ClickableIconWrapper } from './../Styles'
 
@@ -13,7 +13,7 @@ export default class TrackView extends Component {
         track: PropTypes.oneOfType([
             PropTypes.object,
             PropTypes.symbol,
-        ]),
+        ]).isRequired,
         tracksStatus: PropTypes.symbol.isRequired,
         artist: PropTypes.string.isRequired,
         changeTrack: PropTypes.func.isRequired,
@@ -25,17 +25,17 @@ export default class TrackView extends Component {
         if (tracksStatus !== ObjectStatus.FETCHED) {
             return <h3>Fetching track...</h3>;
         } else if (track === TrackNotFound) {
-            return <Redirect to="/404" />
+            return <Redirect to="/404" />;
         }
 
         return (
             <div>
                 <h3>{track.title}</h3>
-                <ClickableIconWrapper>
-                    <FaPlay onClick={() => this.props.changeTrack(track)} />
+                <ClickableIconWrapper onClick={() => this.props.changeTrack(track)}>
+                    <FaPlay />
                 </ClickableIconWrapper>
-                <ClickableIconWrapper>
-                    <FaPlus onClick={() => this.props.addTrackToQueue(track)} />
+                <ClickableIconWrapper onClick={() => this.props.addTrackToQueue(track)} data-event={EventType.PLAYLIST}>
+                    <FaPlus />
                 </ClickableIconWrapper>
             </div>
         );

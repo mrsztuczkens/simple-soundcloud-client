@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Navbar } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom'
 
 import Search from './Search';
 import Queue from './Queue';
@@ -34,7 +35,7 @@ export default class Navigation extends Component {
             <Navbar inverse collapseOnSelect fluid style={{ paddingRight: '0', border: '0' }}>
                 <Navbar.Header>
                     <Navbar.Brand>
-                        <a href="#">Simple Soundcloud Client</a>
+                        <Link to="/">Simple Soundcloud Client</Link>
                     </Navbar.Brand>
                     <Navbar.Toggle />
                 </Navbar.Header>

@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import SC from 'soundcloud';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 
 import { NotFoundComponent } from './components/';
-import { SearchResultsContainer, PlayerContainer, ArtistContainer, NavigationContainer } from './containers'
+import {
+    SearchResultsContainer, PlayerContainer, ArtistContainer,
+    NavigationContainer, HomeContainer, GenreContainer
+} from './containers'
 import { CLIENT_ID } from './consts';
 
-import logo from './logo.svg';
+import { AppWrapper } from './App.style'
 import './App.css';
 
 const history = createHistory();
@@ -27,11 +30,17 @@ class App extends Component {
     render() {
         return (
             <Router history={history}>
-                <div className="App">
-                    <NavigationContainer />
-                    <Route path="/artist/:permalink" component={ArtistContainer} onEnter={(props) => { console.log('onenter', props)}} />
-                    <Route path="/search/:q?" component={SearchResultsContainer} />
-                    <Route path="/404" component={NotFoundComponent} />
+                <div>
+                    <AppWrapper>
+                        <NavigationContainer />
+                        <Switch>
+                            <Route path="/genre/:genre" component={GenreContainer} />
+                            <Route path="/artist/:permalink" component={ArtistContainer} />
+                            <Route path="/search/:q?" component={SearchResultsContainer} />
+                            <Route path="/" exact component={HomeContainer} />
+                            <Route component={NotFoundComponent} />
+                        </Switch>
+                    </AppWrapper>
                     <PlayerContainer />
                 </div>
             </Router>

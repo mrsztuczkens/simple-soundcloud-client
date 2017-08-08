@@ -13,5 +13,7 @@ export const PlayerWrapper = styled.div`
     position: fixed;
     bottom: 0;
     width: 100%;
-    minHeight: 100px;
+    height: 110px;
+    background-color: white;
+    text-align: center;
 `

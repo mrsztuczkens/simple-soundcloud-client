@@ -4,3 +4,7 @@ export const ObjectStatus = Object.freeze({
     FETCHED:  Symbol('fetched'),
     NOTFOUND: Symbol('notfound')
 });
+
+export const EventType = Object.freeze({
+   PLAYLIST: 'PLAYLIST'
+});

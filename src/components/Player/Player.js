@@ -36,6 +36,7 @@ export default class Player extends Component {
             volume: 1,
             progress: 0,
         };
+        this.progressInterval = null;
     }
 
     componentDidMount() {
@@ -44,7 +45,6 @@ export default class Player extends Component {
         this.audio.addEventListener('loadstart', () => console.log('load start'), false);
         this.audio.addEventListener('pause', () => console.log('paused'), false);
         this.audio.addEventListener('play', () => console.log('played'), false);
-        this.audio.addEventListener('timeupdate', this.onTimeUpdate, false);
 
         this.setState({ volume: this.audio.volume });
     }
@@ -55,17 +55,24 @@ export default class Player extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!this.props.isPlaying && nextProps.isPlaying && this.props.track === nextProps.track) {
-            this.audio.play();
+        const startPlaying = !this.props.isPlaying && nextProps.isPlaying;
+        const stopPlaying = this.props.isPlaying && !nextProps.isPlaying;
+        if (startPlaying) {
+            this.progressInterval= setInterval(this.onTimeUpdate, 100);
+            if (this.props.track === nextProps.track) {
+                this.audio.play();
+            }
         }
-        if (this.props.isPlaying && !nextProps.isPlaying) {
+
+        if (stopPlaying) {
+            clearInterval(this.progressInterval);
+            this.progressInterval = null;
             this.audio.pause();
         }
 
     }
 
     onLoadMetadata = () => {
-        console.log('load metadata')
         if (this.props.isPlaying) {
             this.audio.play()
         }
@@ -83,7 +90,6 @@ export default class Player extends Component {
     }
 
     onVolumeChange = (newVolumeValue) => {
-        console.log({ newVolumeValue });
         this.audio.volume = newVolumeValue;
         this.setState({ volume: newVolumeValue });
     }
@@ -94,34 +100,37 @@ export default class Player extends Component {
     }
 
     render() {
-        //this.props.track && console.log(JSON.stringify( this.props.track ));
         return (
             <PlayerWrapper>
-                <audio hidden ref={(input) => this.audio = input } src={this.props.track && formatStreamUrl(this.props.track.stream_url)} />
+                <audio hidden ref={(input) => this.audio = input} src={this.props.track && formatStreamUrl(this.props.track.stream_url)} />
                 <Grid fluid>
                     <Row>
                         <Col lg={3}>
                             <TrackInfo track={this.props.track} />
                         </Col>
                         <Col lg={6}>
-                            <IconWrapper>
-                                <FaBackward disabled={!this.props.hasPrevious} onClick={this.props.previous} className="icon2x" />
-                            </IconWrapper>
-                            {!this.props.isPlaying && 
+                            <Row>
                                 <IconWrapper>
-                                    <FaPlay disabled={!this.props.track} onClick={this.props.play} className="icon2x" />
+                                    <FaBackward disabled={!this.props.hasPrevious} onClick={this.props.previous} className="icon2x" />
                                 </IconWrapper>
-                            }
-                            {this.props.isPlaying &&
-                                <FaPause onClick={this.props.pause} className="icon2x" />
-                            }
-                            <IconWrapper>
-                                <FaForward disabled={!this.props.hasNext} onClick={this.props.next} className="icon2x" />
-                            </IconWrapper>
-                            <IconWrapper>
-                                <FaRepeat disabled={!this.props.repeat} className="icon2x" onClick={this.props.toggleRepeat} />
-                            </IconWrapper>
-                            <ProgressBar progress={this.state.progress} track={this.props.track} />
+                                {!this.props.isPlaying &&
+                                    <IconWrapper>
+                                        <FaPlay disabled={!this.props.track} onClick={this.props.play} className="icon2x" />
+                                    </IconWrapper>
+                                }
+                                {this.props.isPlaying &&
+                                    <FaPause onClick={this.props.pause} className="icon2x" />
+                                }
+                                <IconWrapper>
+                                    <FaForward disabled={!this.props.hasNext} onClick={this.props.next} className="icon2x" />
+                                </IconWrapper>
+                                <IconWrapper>
+                                    <FaRepeat disabled={!this.props.repeat} className="icon2x" onClick={this.props.toggleRepeat} />
+                                </IconWrapper>
+                            </Row>
+                            <Row>
+                                <ProgressBar progress={this.state.progress} track={this.props.track} />
+                            </Row>
                         </Col>
                         <Col lg={3}>
                             <Row>

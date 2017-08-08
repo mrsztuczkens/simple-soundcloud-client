@@ -6,7 +6,9 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 import { Wrapper, QueueList, QueueWrapper, NextTrackWrapper } from './Queue.style';
 import QueueEntry from './QueueEntry';
-import { ClickableIconWrapper } from './../../Styles'
+import { ClickableIconWrapper } from './../../Styles';
+import { EventType } from './../../../enums';
+import { DOMHelper } from './../../../helpers';
 
 class Queue extends Component {
 
@@ -28,8 +30,8 @@ class Queue extends Component {
     }
 
     handleClickOutside = (event) => {
-        console.log(event.target.className);
-        if (this.props.isVisible && this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+        if (this.props.isVisible && this.wrapperRef && !this.wrapperRef.contains(event.target)
+            && !DOMHelper.isEventType(event.target, EventType.PLAYLIST)) {
             this.props.toggle()
         }
     }

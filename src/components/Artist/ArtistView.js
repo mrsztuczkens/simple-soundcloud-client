@@ -4,8 +4,8 @@ import { ListGroup, ListGroupItem } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
 import { ObjectStatus } from './../../enums';
-import TrackList from './TrackList';
-import { playlist as playlistUrl } from './../../helpers/url-helper'
+import TrackList from './../TrackList';
+import { playlist as playlistUrl } from './../../helpers/url-helper';
 
 export default class ArtistMain extends Component {
 
@@ -53,7 +53,6 @@ export default class ArtistMain extends Component {
             <div>
                 <h4>Tracks</h4>
                 <TrackList
-                    artist={this.props.artist}
                     tracks={this.props.tracks}
                     changeTrack={this.props.changeTrack}
                     addTrackToQueue={this.props.addTrackToQueue}

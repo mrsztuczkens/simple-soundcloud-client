@@ -27,8 +27,7 @@ export default class SearchResults extends Component {
                 <SearchResultsList>
                     {data.map(track =>
                         <SearchResultsEntry key={track.id}>
-                            <Link onClick={() => this.props.hide()} to={trackUrl(track.user.permalink, track.permalink)}>{track.title}</Link>
-                            by <Link to={artistUrl(track.user.permalink)} onClick={() => this.props.hide()}>{track.user.username}</Link>
+                            <Link onClick={() => this.props.hide()} to={trackUrl(track.user.permalink, track.permalink)}>{track.title}</Link> by <Link to={artistUrl(track.user.permalink)} onClick={() => this.props.hide()}>{track.user.username}</Link>
                         </SearchResultsEntry>
                     )}
                 </SearchResultsList>

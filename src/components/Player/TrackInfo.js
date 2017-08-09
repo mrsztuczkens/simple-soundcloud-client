@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
+import { UrlHelper } from './../../helpers'
+
 class TrackInfo extends Component {
 
     static propTypes = {
@@ -17,17 +19,18 @@ class TrackInfo extends Component {
         if (!this.props.track) {
             return null;
         }
-        const { title, artwork_url } = this.props.track;
-        const { username: artistUserName, permalink: artistPermalink } = this.props.track.user;
+        const { title, user } = this.props.track;
+        const artwork = this.props.artwork_url || 'http://via.placeholder.com/150x150';
+
         return (
             <Row>
                 <Col lg={5}>
-                    <img src={artwork_url} alt={title} />
+                    <img src={artwork} alt={title} />
                 </Col>
                 <Col lg={7}>
                     <p>{title}</p>
                     <p>
-                        <Link to={{ pathname: `/artist/${artistPermalink}`}}>{artistUserName}</Link>
+                        <Link to={ UrlHelper.artist(user.permalink)}>{user.username}</Link>
                     </p>
                 </Col>
             </Row>

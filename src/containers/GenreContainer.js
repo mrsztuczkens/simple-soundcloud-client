@@ -11,6 +11,8 @@ const mapStateToProps = (state, props) => {
     return {
         tracks: (genreCache && genreCache.tracks) || [],
         tracksStatus: (genreCache && genreCache.tracksStatus) || ObjectStatus.DEFAULT,
+        playlists: (genreCache && genreCache.playlists) || [],
+        playlistsStatus: (genreCache && genreCache.playlistsStatus) || ObjectStatus.DEFAULT,
         genre,
     };
 }

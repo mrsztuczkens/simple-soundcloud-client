@@ -8,6 +8,7 @@ import { CLIENT_ID } from './../consts'
  */
 export const GENRE_FETCH_TRACKS = 'GENRE_FETCH_TRACKS';
 export const GENRE_RECEIVE_TRACKS = 'GENRE_RECEIVE_TRACKS';
+export const GENRE_RECEIVE_PLAYLISTS = 'GENRE_RECEIVE_PLAYLISTS';
 
 /**
  * Action Creators
@@ -19,23 +20,13 @@ export const fetchGenreIfNeeded = (genre) => (dispatch, getState) => {
     if (cachedArtist)
         return;
 
-    return SC.get('/tracks/', { genre: genre })
-        .then((tracks) => {
-            if (!tracks) {
-                //dispatch(notFoundArtist(permalink))
-                return null;
-            }
-            console.log({ tracks });
-            dispatch(receiveTracks(genre, tracks));
-            return true
-        })
-        .then(() => {
-            const fetchUrl = `https://api-v2.soundcloud.com/explore/categories?limit=10&offset=0&linked_partitioning=1&client_id=${CLIENT_ID}`;
-            return fetch(fetchUrl, { headers: { mode: 'no-cors' } });
-        })
-        .then((results) => {
-            console.log({ results });
-        });
+    const promises = [
+        SC.get('/tracks/', { genre: genre })
+            .then((tracks) => dispatch(receiveTracks(genre, tracks))),
+        SC.get('/playlists/', { genre: genre })
+            .then(playlists => dispatch(receivePlaylists(genre, playlists)))
+    ];
+    return Promise.all(promises);
 };
 
 export const fetchTracks = genre => ({
@@ -47,4 +38,10 @@ export const receiveTracks = (genre, tracks) => ({
     type: GENRE_RECEIVE_TRACKS,
     genre,
     tracks,
+});
+
+export const receivePlaylists = (genre, playlists) => ({
+    type: GENRE_RECEIVE_PLAYLISTS,
+    genre,
+    playlists,
 });

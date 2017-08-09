@@ -12,9 +12,8 @@ import {
     NavigationContainer, HomeContainer, GenreContainer
 } from './containers'
 import { CLIENT_ID } from './consts';
-
 import { AppWrapper } from './App.style'
-import './App.css';
+import './App.css'
 
 const history = createHistory();
 
